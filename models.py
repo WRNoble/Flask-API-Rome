@@ -13,7 +13,7 @@ class Emperor(Model):
         database = DATABASE
 
 class Bio(Model):
-    emperor = models.ForeignKey(Course, related_name='life', on_delete=models.CASCADE)
+    emperor = ForeignKeyField(Emperor, related_name='life')
     comment = TextField()
     created_at = DateTimeField(default=datetime.datetime.now)
 

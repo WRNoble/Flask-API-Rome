@@ -1,27 +1,32 @@
 from flask import jsonify, Blueprint
 
-from flask_restful import Resource, Api, reqparse
+from flask_restful import Resource, Api, reqparse, inputs, fields, marshal, marshal_with
 
 import models
 
+emperor_fields = {
+    'id': fields.Integer,
+    'title': fields.String,
+}
+
+
 class EmperorList(Resource):
     def __init__(self):
-        self.reqparse = reqparse.RequestParse()
+        self.reqparse = reqparse.RequestParser()
         self.reqparse.add_argument(
-            "title",
-            required=True,
+            "title",           
             help="No emperor name provided",
-            location=['form', 'json']
-        )
-        self.reqparse.add_argument(
-            'url',
-            require=True,
-            help="No URL provided",
             location=['form', 'json']
         )
         super().__init__()
 
     def get(self):
+        emperors = [marshal(emperor, emperor_fields) for emperor in models.Emperor.select()]
+        return {'emperors': emperors}
+
+    def post(self):
+        args = self.reqparse.parse_args()
+        #models.Emperor.create(**args)
         return jsonify({'emperors': [{'title': 'Augustus Caesar'}]})
 
 class Emperor(Resource):

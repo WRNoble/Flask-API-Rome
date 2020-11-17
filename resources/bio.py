@@ -1,10 +1,20 @@
 from flask import jsonify, Blueprint
 
-from flask_restful import Resource, Api
+from flask_restful import Resource, Api, reqparse
 
 import models
 
 class BioList(Resource):
+    def __init__(self):
+        self.reqparse = reqparse.RequestParser()
+        self.reqparse.add_argument(
+            'emperor',
+            required=True,
+            help="No bio info provided",
+            location=["form", "json"]
+        )
+        super().__init__()
+
     def get(self):
         return jsonify({'bio': [{'life': 'The first emperor of Rome'}]})
 

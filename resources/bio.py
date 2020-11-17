@@ -1,6 +1,6 @@
-from flask import jsonify
+from flask import jsonify, Blueprint
 
-from flask.ext.restful import Resource
+from flask_restful import Resource, Api
 
 import models
 
@@ -17,3 +17,18 @@ class Bio(Resource):
 
     def delete(self, id):
         return jsonify({'life': 'The first emperor of Rome'})
+
+
+bio_api = Blueprint('resources.bio', __name__)
+api = Api(bio_api)
+api.add_resource(
+    BioList,
+    '/bios',
+    endpoint='bios'
+)
+
+api.add_resource(
+    Bio,
+    '/bios/<int:id>',
+    endpoint="bio"
+)

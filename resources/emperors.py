@@ -1,6 +1,6 @@
-from flask import jsonify
+from flask import jsonify, Blueprint
 
-from flask.ext.restful import Resource
+from flask.ext.restful import Resource, Api
 
 import models
 
@@ -17,3 +17,17 @@ class Emperor(Resource):
 
     def delete(self, id):
         return jsonify({'title': Augustus Caesar})
+
+emperors_api = Blueprint('resource.emperors', __name__)
+api = Api(emperors_api)
+api.add_resource(
+    EmperorList,
+    '/api/v1/emperors',
+    endpoint='emperors'
+)
+
+api.add_resource(
+    Emperor,
+    '/api/v1/emperors/<int:id>',
+    endpoint='emperor'
+)
